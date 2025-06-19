@@ -21,3 +21,46 @@ Para simplificarlo, hemos creado este repo starter que se conecta a la base de d
 
 ## Postman
 En el directorio `postman` del repo, vas a encontrar los dos requests para que puedas importarlos en Postman.
+
+## Resumen de la resolucion
+Carga de archivo
+Se usó multer para manejar el archivo recibido desde Postman.
+
+El archivo CSV se procesa directamente desde el disco sin cargarlo completo en memoria.
+
+ Lectura y procesamiento de CSV
+Se usó csv-parser para parsear el archivo línea por línea.
+
+Se utilizó fs.createReadStream() para leer el archivo como stream (ideal para grandes volúmenes de datos).
+
+ Inserción en MongoDB
+Se almacenaron los datos por lotes (batch) de 1000 registros usando insertMany.
+
+Esto optimiza la cantidad de operaciones a la base y el uso de memoria.
+
+Validación y limpieza de datos
+Cada registro se validó con una función parseRecord(), que:
+
+Verifica que el campo id sea un número válido.
+
+Limpia espacios en blanco.
+
+Convierte emails a minúsculas.
+
+Descarta registros incompletos o inválidos.
+
+ Medición de performance
+Se utilizó console.time() y process.memoryUsage() para medir:
+
+Tiempo total de procesamiento.
+
+Uso de memoria.
+
+## Reporte de performance 
+Prueba ejecutada con un archivo de ~80MB, 500,000 registros
+
+Tiempo total: 5042.183ms
+Registros insertados: 500000
+Memoria utilizada: 54.21 MB
+Nota: Los resultados pueden variar según la máquina local y la conexión a la base.
+
